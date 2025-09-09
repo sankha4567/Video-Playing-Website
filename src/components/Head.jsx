@@ -54,21 +54,37 @@ const Head = () => {
   
   */ 
 // search query is const but we can change it becuase evry time it is a new variable when he renders happens */
-  const getSearchSuggestions = async ()=>{
+  // const getSearchSuggestions = async ()=>{
     
-    const data = await fetch(YOUTUBE_SEARCH_API + searchQuery);
-    const json=await data.json();
-    // console.log(json[1]);
+  //   const data = await fetch(YOUTUBE_SEARCH_API + searchQuery);
+  //   const json=await data.json();
+  //   // console.log(json[1]);
+  //   setSuggestion(json[1]);
+  //   // to update my cache i will dispatch an action
+  //   dispatch(
+  //     cacheResults({
+  //     [searchQuery]:json[1],
+  //     //iphone:[1,2,3],
+  //   })
+  // );
+  // };
+  const getSearchSuggestions = async () => {
+  try {
+    const res = await fetch(YOUTUBE_SEARCH_API + encodeURIComponent(searchQuery));
+    const json = await res.json();
+
     setSuggestion(json[1]);
-    // to update my cache i will dispatch an action
+
     dispatch(
       cacheResults({
-      [searchQuery]:json[1],
-      //iphone:[1,2,3],
-    })
-  );
-  };
-  
+        [searchQuery]: json[1],
+      })
+    );
+  } catch (err) {
+    console.error("❌ Failed to fetch suggestions", err);
+  }
+};
+
   const toggleMenuHandeler=()=>{
     dispatch(toggleMenu());
   }
